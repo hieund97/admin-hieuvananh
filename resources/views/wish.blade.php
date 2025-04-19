@@ -32,6 +32,8 @@
 
                         <button class="btn btn-success" id="accept_all">Duyệt tất cả</button>
 
+                        <button class="btn btn-warning" id="reject_all">Huỷ duyệt tất cả</button>
+
                         <table class="table table-hover" id="wish-table">
                             <thead>
                                 <tr>
@@ -146,44 +148,54 @@
             });
 
             $('#accept_all').on('click', function() {
-                var url = "{{ route('wish.acceptAll') }}";
-                Swal.fire({
-                    title: "Bạn có chắc chắn muốn duyệt tất cả không?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Có, duyệt tất cả!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            data: {
-                                _token: '{{ csrf_token() }}',
-                                _method: 'PATCH'
-                            },
-                            success: function(response) {
-                                Swal.fire(
-                                    "Đã Duyệt!",
-                                    "Tất cả lời chúc đã được duyệt.",
-                                    "success"
-                                ).then(() => {
-                                    location.reload();
-                                });
-                            },
-                            error: function(xhr) {
-                                Swal.fire(
-                                    "Lỗi!",
-                                    "Something went wrong.",
-                                    "error"
-                                );
-                            }
-                        });
-                    }
-                });
+                changeStatusAll(1);
             });
+
+            $('#reject_all').on('click', function() {
+                changeStatusAll(0);
+            });
+
         });
+
+        function changeStatusAll(status) {
+            var url = "{{ route('wish.acceptAll') }}";
+            Swal.fire({
+                title: "Bạn có chắc chắn muốn cập nhật tất cả?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Có, cập nhật tất cả!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            _method: 'PATCH',
+                            status: status
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                "DONE",
+                                "Tất cả lời chúc đã được cập nhật.",
+                                "success"
+                            ).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function(xhr) {
+                            Swal.fire(
+                                "Lỗi!",
+                                "Something went wrong.",
+                                "error"
+                            );
+                        }
+                    });
+                }
+            });
+        }
     </script>
 
 </body>

@@ -70,10 +70,11 @@ class WishController extends Controller
         return redirect()->back()->with('success', 'Trạng thái lời chúc đã được cập nhật!');
     }
 
-    public function updateAllStatuses()
+    public function updateAllStatuses(Request $request)
     {
+        $status = $request->status;
         // Update the status of all wishes to 1
-        \App\Models\Wish::query()->update(['wish_status' => 1]);
+        \App\Models\Wish::query()->update(['wish_status' => $status]);
 
         // Redirect back with success message
         return redirect()->back()->with('success', 'Tất cả trạng thái lời chúc đã được cập nhật!');
