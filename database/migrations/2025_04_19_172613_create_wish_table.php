@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('wish_message');
-            $table->tinyInt('status')->default(0);
+            $table->integer('wish_status')->default(0); // 0: not completed, 1: completed
             $table->timestamps();
         });
     }
