@@ -19,25 +19,32 @@ class WishController extends Controller
     {
         // Check honeypot field to protect against spam
         if ($request->has('honeypot') && !empty($request->honeypot)) {
-            return redirect()->back()->with('error', 'Spam detected!');
+            return response()->json(['error' => 'Phát hiện spam!'], 400);
         }
 
-        // Validate the request data
-        // $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'wish_message' => 'required|string|max:255|min:10',
-        // ]);
+        // Validate the request data with custom messages in Vietnamese
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'wish_message' => 'required|string|max:255|min:10',
+        ], [
+            'name.required' => 'Tên là bắt buộc.',
+            'name.string' => 'Tên phải là một chuỗi ký tự.',
+            'name.max' => 'Tên không được vượt quá 255 ký tự.',
+            'wish_message.required' => 'Lời chúc là bắt buộc.',
+            'wish_message.string' => 'Lời chúc phải là một chuỗi ký tự.',
+            'wish_message.max' => 'Lời chúc không được vượt quá 255 ký tự.',
+            'wish_message.min' => 'Lời chúc phải có ít nhất 10 ký tự.',
+        ]);
 
         // Create a new wish
-        \App\Models\Wish::create([
-            'name' => $request->name,
-            'wish_message' => $request->wish_message,
+        $wish = \App\Models\Wish::create([
+            'name' => $validatedData['name'],
+            'wish_message' => $validatedData['wish_message'],
             'wish_status' => 0, // Default status
         ]);
 
-
-        // Redirect back with success message
-        return redirect()->back()->with('success', 'Cám ơn bạn đã gửi lời chúc đến chúng tôi!');
+        // Return success response
+        return response()->json(['success' => 'Cám ơn bạn đã gửi lời chúc đến chúng tôi!', 'wish' => $wish], 201);
     }
 
     public function destroy($id)
