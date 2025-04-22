@@ -9,7 +9,7 @@ class WishController extends Controller
     public function index()
     {
         // Fetch all wishes from the database
-        $wishes = \App\Models\Wish::orderBy('created_at', 'desc')->get();
+        $wishes = \App\Models\Wish::orderBy('id', 'desc')->get();
 
         // Return the view with the wishes data
         return view('wish', compact('wishes'));
