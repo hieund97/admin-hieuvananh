@@ -85,7 +85,6 @@ class WishController extends Controller
         // Fetch the latest 10 wishes with status 1 from the database
         $latestWishes = \App\Models\Wish::where('wish_status', 1)
             ->orderBy('created_at', 'desc')
-            ->limit(10)
             ->get()
             ->toArray();
 
