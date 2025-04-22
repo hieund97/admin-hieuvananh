@@ -84,7 +84,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.19.1/dist/sweetalert2.all.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#wish-table').DataTable();
+            $('#wish-table').DataTable({
+                order: [[0, 'desc']]
+            });
 
             $(document).on('click', '.delete-wish', function() {
                 var id = $(this).data('id');
