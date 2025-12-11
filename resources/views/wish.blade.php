@@ -30,44 +30,96 @@
                 <div class="col-md-12">
                     <div class="table-wrap">
 
+
                         <button class="btn btn-success" id="accept_all">Duyệt tất cả</button>
 
                         <button class="btn btn-warning" id="reject_all">Huỷ duyệt tất cả</button>
 
-                        <table class="table table-hover" id="wish-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 15%;">Tên</th>
-                                    <th style="width: 45%;">Lời chúc</th>
-                                    <th style="width: 15%;">Trạng thái</th>
-                                    <th style="width: 15%;">Ngày tạo</th>
-                                    <th style="width: 10%;">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($wishes as $wish)
-                                    <tr class="alert" role="alert">
+                        <ul class="nav nav-tabs mt-4" id="wishTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="wedding-tab" data-toggle="tab" href="#wedding"
+                                    role="tab" aria-controls="wedding" aria-selected="true">Wedding</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="baby-tab" data-toggle="tab" href="#baby" role="tab"
+                                    aria-controls="baby" aria-selected="false">Baby</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="wishTabContent">
+                            <div class="tab-pane fade show active" id="wedding" role="tabpanel"
+                                aria-labelledby="wedding-tab">
+                                <table class="table table-hover" id="wedding-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 15%;">Tên</th>
+                                            <th style="width: 45%;">Lời chúc</th>
+                                            <th style="width: 15%;">Trạng thái</th>
+                                            <th style="width: 15%;">Ngày tạo</th>
+                                            <th style="width: 10%;">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($weddingWishes as $wish)
+                                            <tr class="alert" role="alert">
 
-                                        <td>
-                                            {{ $wish->name }}
-                                        </td>
-                                        <td>{{ $wish->wish_message }}</td>
-                                        <td class="status" style="cursor: pointer;">
-                                            <span
-                                                class="{{ $wish->wish_status == 1 ? 'active' : 'waiting' }} status-wish"
-                                                data-status="{{ $wish->wish_status }}">{{ $wish->wish_status == 1 ? 'Đã duyệt' : 'Chờ duyệt' }}</span>
-                                        </td>
-                                        <td>{{ $wish->created_at->format('H:i - d-m-Y') }}</td>
-                                        <td>
-                                            <button type="button" data-id="{{ $wish->id }}"
-                                                class="btn btn-danger btn-sm delete-wish">
-                                                Xoá
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                                <td>
+                                                    {{ $wish->name }}
+                                                </td>
+                                                <td>{{ $wish->wish_message }}</td>
+                                                <td class="status" style="cursor: pointer;">
+                                                    <span
+                                                        class="{{ $wish->wish_status == 1 ? 'active' : 'waiting' }} status-wish"
+                                                        data-status="{{ $wish->wish_status }}">{{ $wish->wish_status == 1 ? 'Đã duyệt' : 'Chờ duyệt' }}</span>
+                                                </td>
+                                                <td>{{ $wish->created_at->format('H:i - d-m-Y') }}</td>
+                                                <td>
+                                                    <button type="button" data-id="{{ $wish->id }}"
+                                                        class="btn btn-danger btn-sm delete-wish">
+                                                        Xoá
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="baby" role="tabpanel" aria-labelledby="baby-tab">
+                                <table class="table table-hover" id="baby-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 15%;">Tên</th>
+                                            <th style="width: 45%;">Lời chúc</th>
+                                            <th style="width: 15%;">Trạng thái</th>
+                                            <th style="width: 15%;">Ngày tạo</th>
+                                            <th style="width: 10%;">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($babyWishes as $wish)
+                                            <tr class="alert" role="alert">
+
+                                                <td>
+                                                    {{ $wish->name }}
+                                                </td>
+                                                <td>{{ $wish->wish_message }}</td>
+                                                <td class="status" style="cursor: pointer;">
+                                                    <span
+                                                        class="{{ $wish->wish_status == 1 ? 'active' : 'waiting' }} status-wish"
+                                                        data-status="{{ $wish->wish_status }}">{{ $wish->wish_status == 1 ? 'Đã duyệt' : 'Chờ duyệt' }}</span>
+                                                </td>
+                                                <td>{{ $wish->created_at->format('H:i - d-m-Y') }}</td>
+                                                <td>
+                                                    <button type="button" data-id="{{ $wish->id }}"
+                                                        class="btn btn-danger btn-sm delete-wish">
+                                                        Xoá
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
 
                     </div>
@@ -84,8 +136,15 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.19.1/dist/sweetalert2.all.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#wish-table').DataTable({
-                order: [[0, 'desc']]
+            $('#wedding-table').DataTable({
+                order: [
+                    [0, 'desc']
+                ]
+            });
+            $('#baby-table').DataTable({
+                order: [
+                    [0, 'desc']
+                ]
             });
 
             $(document).on('click', '.delete-wish', function() {

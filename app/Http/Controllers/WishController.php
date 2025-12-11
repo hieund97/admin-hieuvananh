@@ -8,11 +8,14 @@ class WishController extends Controller
 {
     public function index()
     {
-        // Fetch all wishes from the database
-        $wishes = \App\Models\Wish::orderBy('id', 'desc')->get();
+        // Fetch wedding wishes (type 1)
+        $weddingWishes = \App\Models\Wish::where('wish_type', 1)->orderBy('id', 'desc')->get();
+
+        // Fetch baby wishes (type 2)
+        $babyWishes = \App\Models\Wish::where('wish_type', 2)->orderBy('id', 'desc')->get();
 
         // Return the view with the wishes data
-        return view('wish', compact('wishes'));
+        return view('wish', compact('weddingWishes', 'babyWishes'));
     }
 
     public function store(Request $request)
@@ -41,6 +44,7 @@ class WishController extends Controller
             'name' => $validatedData['name'],
             'wish_message' => $validatedData['wish_message'],
             'wish_status' => 0, // Default status
+            'wish_type' => $request->wish_type,
         ]);
 
         // Return success response
@@ -80,11 +84,17 @@ class WishController extends Controller
         return redirect()->back()->with('success', 'Tất cả trạng thái lời chúc đã được cập nhật!');
     }
 
-    public function getLatestWishes()
+    public function getLatestWishes(Request $request)
     {
+        $wishType = $request->input('wish_type');
         // Fetch the latest 10 wishes with status 1 from the database
-        $latestWishes = \App\Models\Wish::where('wish_status', 1)
-            ->orderBy('created_at', 'desc')
+        $query = \App\Models\Wish::where('wish_status', 1);
+
+        if ($wishType) {
+            $query->where('wish_type', $wishType);
+        }
+
+        $latestWishes = $query->orderBy('created_at', 'desc')
             ->get()
             ->toArray();
 

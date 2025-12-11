@@ -15,8 +15,9 @@ class Wish extends Model
         'name',
         'wish_message',
         'wish_status',
+        'wish_type',
     ];
-    
+
     protected $casts = [
         'wish_status' => 'boolean',
     ];
